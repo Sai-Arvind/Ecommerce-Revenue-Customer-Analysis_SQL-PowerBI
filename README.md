@@ -1,4 +1,5 @@
-# 🛒 Ecommerce Retail Sales and Customer Analytics (SQL + Power BI + Excel)
+# 🛒 Ecommerce Retail Sales and Customer Analytics 
+SQL + Power BI + Excel/Power Query
 
 Welcome to the **Vrinda Store Revenue & Customer Segmentation Project** 🚀  
 
