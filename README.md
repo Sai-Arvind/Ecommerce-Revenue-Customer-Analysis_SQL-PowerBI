@@ -1,211 +1,173 @@
-# 🛒 Ecommerce Retail Sales and Customer Analytics 
-SQL + Power BI + Excel/Power Query
+Welcome to 
+# 🚀 Retail Revenue & Customer Segmentation Pipeline  
+**ETL | Star Schema | DAX | KPI Design | Power Query | SQL**
 
-Welcome to the **Vrinda Store Revenue & Customer Segmentation Project** 🚀  
+This project demonstrates an end-to-end analytics pipeline from raw flat file data into actionable business insights.
 
-This project demonstrates an end-to-end analytics pipeline from raw transaction data to business insights using **SQL, and Power BI concepts**.
-
-The goal was to transform a flat sales dataset into a performance-optimized analytical model, identify customer loyalty behavior, and measure revenue dependency on repeat buyers.
+Goal of this project is to analyze 2024 retail sales data to evaluate business performance, identify revenue dependencies, and uncover opportunities for growth and customer retention.
 
 ---
 
 # 🧩 Business Problem  
 
-The company lacked visibility into:
+The business lacked a structured analytical framework to track performance and make data-driven decisions.
 
-- Customer loyalty behavior  
-- Revenue contribution from repeat vs new customers  
-- Monthly sales patterns  
-- Demographic-driven purchasing behavior  
-- Data model performance efficiency  
+Key challenges included:
 
-Without segmentation and structured modeling, decision-making was reactive rather than data-driven.
+1. **Visibility Gap:** No clear view of the total **active customer base**.
+2.**Retention Analysis:** Unclear revenue contribution from **repeat vs. new customers**.
+3. **Growth Tracking:** Absence of **monthly and quarterly growth** trend monitoring.
+4. **Engagement Metrics:** Limited understanding of **purchase frequency**.
 
----
-
-# 🏗️ End-to-End Analytics Process  
-
-## 1️⃣ ETL Layer - Data Preparation  
-
-- Cleaned **30,000+ transaction records**
-- Removed nulls, duplicates, and inconsistent order statuses
-- Standardized formats and column names
-- Structured raw flat data into analytical format
-- Created reusable transformation logic in SQL
+Without these insights, decision-making remained reactive rather than strategic.
 
 ---
 
-## 2️⃣ Data Modeling - Star Schema Implementation ⭐  
+# 🏗️ Implementing End-to-End Analytical Procedures
 
-To improve performance and scalability, the flat transaction file was transformed into a **Star Schema model**.
+## 1️⃣ ETL (Extract, Transform, Load) Data Preparation
+
+1. Cleaned and processed **30,000+ transaction records** using Power Query  
+2. Handled **missing values**, removed **duplicates**, and **standardized** date formats  
+3. Transformed raw flat data into structured analytical format  
+4. Built reusable SQL transformations for scalable data processing  
+
+---
+
+### 2️⃣ Data Modeling (Star Schema) ⭐
+Implemented a **Star Schema** in Power BI to ensure high performance and scalability  
+
+1. **Fact Table:** Sales Transactions.
+2. **Dimension Tables:** Customers, Date, Product, and Channel.
+3. **Optimization:** Reduced redundancy, resulting in a **~30% improvement** in DAX query execution and report rendering.
 
 ### Model Design
 
-**Fact Table**
-- Fact_Sales  
-  - Order_ID  
-  - Customer_ID  
-  - Sales_Amount  
-  - Order_Date  
-  - Channel  
-  - State  
-
-**Dimension Tables**
-- Dim_Customers  
-- Dim_Date  
-- Dim_Product  
-- Dim_Channel  
-
-### Impact of Star Schema
-
-- Reduced calculation redundancy  
-- Improved dashboard rendering performance by ~30%  
-- Enabled scalable KPI calculations  
-- Improved aggregation efficiency  
-
-This structure mirrors enterprise BI modeling practices.
+| **Fact Table**     | **Dimension Tables**      |
+|----------------|----------------|
+| Sales Transactions     | Dim_Customers, Dim_Date    |
+|                | Dim_Product, Dim_Channel          |
 
 ---
 
-## 3️⃣ SQL Customer Segmentation Logic  
+## 📊 primary KPI Framework
 
-The following SQL logic was used to identify Repeat vs New customers:
+This project tracks key business metrics across multiple dimensions to evaluate performance, growth, and efficiency.
+
+| Category | KPIs | insight|
+|----------|------|------|
+| **Sales** → | Total Revenue, Orders, AOV | Overall business health |
+| **Customer** → | Repeat %, Revenue Contribution | Loyalty and retention strength |
+| **Product** → | Top Products, Contribution % |  Best sellers vs slow movers |
+| **Growth** → | MoM Growth, Seasonal Trends | Business momentum |
+
+
+---
+### ⚙️ Teck Stack
+
+| **Tool**   | **Purpose ⭐**                                      |
+|------------|-----------------------------------------------|
+| **Excel**  → | ETL, Power Query, Initial Data Cleaning, Transformation |
+| **SQL**    → | Data Verification, segmentation logic, and KPI calculations.  |
+| **Power BI**  →| Interactive visualization/ Charts, Slicers,Data modeling (Star Schema)        |
+
+
+---
+
+### 3️⃣ Customer Segmentation & Behavioral Analysis (SQL)
+
+Developed a segmentation model to distinguish between One-time and Repeat purchasers to understand revenue concentration.
+
 
 ```sql
--- Query to identify Repeat Customers vs New Customers
+-- Identifying Customer Loyalty Segments
 WITH CustomerStats AS (
     SELECT 
         Customer_ID,
-        COUNT(Order_ID) AS total_orders,
-        SUM(Sales_Amount) AS total_revenue
+        COUNT(Order_ID) AS Order_Count,
+        SUM(Sales_Amount) AS Lifetime_Value
     FROM Transactions
     GROUP BY Customer_ID
 )
 SELECT 
-    CASE WHEN total_orders > 1 THEN 'Repeat' ELSE 'New' END AS Customer_Type,
-    COUNT(Customer_ID) AS Customer_Count,
-    SUM(total_revenue) AS Revenue_Contribution
+    CASE WHEN Order_Count > 1 THEN 'Repeat' ELSE 'One-Time' END AS Customer_Segment,
+    COUNT(Customer_ID) AS Total_Customers,
+    SUM(Lifetime_Value) AS Total_Revenue
 FROM CustomerStats
 GROUP BY 1;
 ```
 
 ### Key Finding
 
-- ~70% of total revenue was generated by **Repeat Customers**
-- Business showed high revenue dependency on loyalty-driven segments
+~70% of total revenue is generated by Repeat Customers, highlighting a high dependency on loyalty-driven segments.
 
 ---
 
-## 4️⃣ Visualization Layer - Power BI / Excel Dashboard  
-
-An interactive dashboard was built to monitor:
-
-- Monthly Sales Trends  
-- Repeat vs New Revenue Contribution  
-- State-wise Performance  
-- Gender & Age Segmentation  
-- Channel-wise Sales Distribution  
-- Order Status Overview  
-
-Dashboard optimized using:
-
-- Structured data model  
-- Reduced calculated columns  
-- Efficient aggregations  
-
-Performance improvement: ~30% faster rendering.
+### 4️⃣ Visualization 
 
 ## 📊 Dashboard Preview
 ![dash](https://github.com/user-attachments/assets/53cd6b27-cc27-44bf-b63e-ea85226b9281)
 
 ---
+**Optimization Steps**
+1. Removed unnecessary columns to reduce model size.
+2. Leveraged Star Schema to optimize DAX measures and aggregations.
+
+--
 
 # 📊 Key Insights  
 
-- Women contribute ~65% of total purchases  
-- Age group 30–49 drives nearly 50% of total sales  
-- Repeat customers generate ~70% of revenue  
-- Top-performing states: Maharashtra, Karnataka, Uttar Pradesh  
-- Majority of orders from Amazon, Flipkart, Myntra  
-
+1. **Loyalty:** Repeat customers drive **~70% of total revenue**.
+2. **Demographics:** Women aged **30–50 contribute ~60% of revenue**, forming the core customer base.
+3. **Geography**: **TOP 3** Maharashtra, Karnataka, and Uttar Pradesh are the top-performing states.
+4. **Channels:** High dependency on marketplaces **(Amazon, Flipkart, Myntra)** for order volume.
 ---
 
 # 💡 Business Recommendations  
 
-- Implement loyalty retention programs targeting repeat buyers  
-- Strengthen marketing campaigns for women aged 30–49  
-- Optimize regional promotions in top-performing states  
-- Monitor churn signals using Recency & Frequency tracking  
+1. **Retention:** Launch targeted loyalty programs for high-value repeat buyers.
+2. **Marketing:** Focus ad spend on the Women 30–50 demographic in top-performing states.
+3. **Churn Prevention:** Implement RFM (Recency, Frequency, Monetary) tracking to identify at-risk customers.
 
 ---
-
 # 📂 Updated Repository Structure  
 
 ```
-vrinda-store-analytics/
+vrinda-retail-store-sales-analytics/
 │
-├── Data/
+├── 📁 data/
 │   └── retail_data.xlsx
 │
-├── SQL_Scripts/
-│   ├── data_cleaning_and_segmentation.sql
-│   └── segmentation.sql
+├── 📁 sql/
+│   ├── 01_data_cleaning.sql
+│   ├── 02_data_modeling.sql
+│   ├── 03_kpi_calculations.sql
+│   └── 04_customer_segmentation.sql
 │
-├── Dashboard/
-│   ├── Dashboard_Screenshot_1.png
-│   ├── Dashboard_Screenshot_2.png
-│   └── Vrinda_Store_Report.pbix
+├── 📁 powerbi/
+│   └── retail_store_dashboard.pbix
+│
+├── 📁 dashboard/
+│   ├── overview.png
+│   ├── sales_analysis.png
+│   ├── customer_analysis.png
+│   └── product_insights.png
+│
+├── 📁 docs/
+│   └── data_dictionary.md
 │
 ├── README.md
-├── LICENSE
 └── .gitignore
-```
-
----
-
-# ▶️ How to Use This Project  
-
-1. Run the `segmentation.sql` script to generate customer segmentation metrics.  
-2. Open the Power BI (.pbix) file to view the optimized dashboard.  
-3. Use slicers to analyze revenue by month, state, age group, and channel.  
-
----
-
-# 🛠️ Tools & Technologies  
-
-- Microsoft Excel  
-- SQL  
-- Power BI  
-- Star Schema Modeling  
-- ETL & Data Cleaning  
-- KPI Development  
-
----
-
-# 🎯 What This Project Demonstrates  
-
-- End-to-end analytics pipeline thinking  
-- SQL-based customer segmentation  
-- Dimensional modeling (Star Schema)  
-- Performance optimization mindset  
-- Business impact storytelling  
-- BI dashboard development  
-
+```  
 ---
 
 # 👨‍💻 About Me  
 
-Hi, I’m **A. Sai Arvind**, a Data Analyst focused on building scalable, performance-optimized analytical solutions.
+Hi, I’m **A. Sai Arvind**, a Data Analyst focused on building scalable, performance-optimized analytical solutions. 
 
-I specialize in:
-- SQL Analytics  
-- Power BI Data Modeling  
-- Business KPI Design  
-- Revenue & Customer Behavior Analysis  
-
-📧 Email: saiarvind5081@gmail.com  
-🔗 LinkedIn: https://www.linkedin.com/in/saiarvindofficial/  
-🔗 GitHub: https://github.com/Sai-Arvind  
+📧 **Email:** saiarvind5081@gmail.com  
+🔗 **LinkedIn:** https://www.linkedin.com/in/saiarvindofficial/  
+🔗 **GitHub:** https://github.com/Sai-Arvind  
 
 ---
 
