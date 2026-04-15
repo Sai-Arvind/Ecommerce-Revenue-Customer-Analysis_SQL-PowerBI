@@ -58,6 +58,7 @@ To build a scalable analytics framework that:
 
 
 ### 🏗️ Data Preprocessing & Preparation
+Kaggle: https://www.kaggle.com/datasets/anshika2301/vrinda-store-data-analysis/data?select=Store+Data.xlsx
 
 - Cleaned and processed **30,000+ transaction records** using Power Query ETL
 - Important Columns : Channels, category , Quantity, Amount, Region, Date, Order_status, Age, Gender
@@ -502,7 +503,6 @@ vrinda-ecommerce-analytics/
 │   └── kpi_definitions.md
 │
 ├── README.md
-└── requirements.txt (optional)
 
 
 ```
@@ -524,8 +524,8 @@ vrinda-ecommerce-analytics/
 Hi, I’m **A. Sai Arvind**, a Data Analyst Enthusiasd focused on building scalable, performance-driven analytical solutions.  
 
 📧 saiarvind5081@gmail.com  
-🔗 LinkedIn: www.linkedin.com/in/saiarvindofficial
-🔗 GitHub: https://github.com/Sai-Arvind/
+- 🔗 LinkedIn: www.linkedin.com/in/saiarvindofficial
+- 🔗 GitHub: https://github.com/Sai-Arvind/
 
 ---
 
