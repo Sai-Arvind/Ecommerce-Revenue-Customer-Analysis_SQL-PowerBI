@@ -1,173 +1,498 @@
-### Welcome to 
-# 🚀 End-to-End Retail Analytics: Revenue Growth & Customer Intelligence Pipeline 
-**ETL | Star Schema | DAX | KPI Design | Power Query | SQL**
+ # 🚀 Ecommerce Analytics: Revenue Intelligence & Operational Optimization  
+"64% of total revenue is driven by a single customer segment, while specific regions show disproportionately high cancellations - highlighting both growth opportunities and operational gaps.”
+ 
+KPI Design | ETL | SQL | Power BI | Business Insights
 
-This project demonstrates an end-to-end analytics pipeline from raw flat file data into actionable business insights.
 
-Goal of this project is to analyze 2024 retail sales data to evaluate business performance, identify revenue dependencies, and uncover opportunities for growth and customer retention.
+This project transforms raw transactional data into a structured analytical framework to drive revenue growth, customer understanding, and operational efficiency.
 
 ---
 
-# 🧩 Business Problem  
+### 🧩 Business Problem  
 
 The business lacked a structured analytical framework to track performance and make data-driven decisions.
 
 Key challenges included:
 
-1. **Visibility Gap:** No clear view of the total **active customer base**.
-2.**Retention Analysis:** Unclear revenue contribution from **repeat vs. new customers**.
-3. **Growth Tracking:** Absence of **monthly and quarterly growth** trend monitoring.
-4. **Engagement Metrics:** Limited understanding of **purchase frequency**.
-
-Without these insights, decision-making remained reactive rather than strategic.
-
----
-
-# 🏗️ Implementing End-to-End Analytical Procedures
-
-## 1️⃣ ETL (Extract, Transform, Load) Data Preparation
-
-1. Cleaned and processed **30,000+ transaction records** using Power Query  
-2. Handled **missing values**, removed **duplicates**, and **standardized** date formats  
-3. Transformed raw flat data into structured analytical format  
-4. Built reusable SQL transformations for scalable data processing  
+1. **Revenue Visibility:** No clear distinction btw **Gross Sales vs Net Revenue**  
+2. **Customer Behaviour:** Limited insights into **who is driving the revenue (gender, age group)**  
+3. **Product Performance:** No clarity on **top vs Slow moving categories**  
+4. **Operational Gaps:** Hidden inefficiencies in **returns and regional cancellations**  
+5. **Seasonality Trends:** No structured view of **monthly trends revenue**
+6. Showcase clear growth and profitable 
 
 ---
 
-### 2️⃣ Data Modeling (Star Schema) ⭐
-Implemented a **Star Schema** in Power BI to ensure high performance and scalability  
+### 🎯 Objective
 
-1. **Fact Table:** Sales Transactions.
-2. **Dimension Tables:** Customers, Date, Product, and Channel.
-3. **Optimization:** Reduced redundancy, resulting in a **~30% improvement** in DAX query execution and report rendering.
+To analyze e-commerce onilne data and uncover:
 
-### Model Design
-
-| **Fact Table**     | **Dimension Tables**      |
-|----------------|----------------|
-| Sales Transactions     | Dim_Customers, Dim_Date    |
-|                | Dim_Product, Dim_Channel          |
+True revenue performance (Gross vs Net) 
+Showcasing clear revenue growth and profitability drivers through data-driven analysis
+Key customer segments driving growth 
+Product-level revenue concentration 
+Hidden operational inefficiencies (returns & cancellations) 
+Seasonal demand patterns impacting revenue 
 
 ---
 
-## 📊 primary KPI Framework
 
-This project tracks key business metrics across multiple dimensions to evaluate performance, growth, and efficiency.
+### 📊 Primary KPI Framework ⭐ 
 
-| Category | KPIs | insight⭐|
+| Category | KPIs | Insight | 
 |----------|------|------|
-| **Sales** → | Total Revenue, Orders, AOV | Overall business health |
-| **Customer** → | Repeat %, Revenue Contribution | Loyalty and retention strength |
-| **Product** → | Top Products, Contribution % |  Best sellers vs slow movers |
-| **Growth** → | MoM Growth, Seasonal Trends | Business momentum |
-
-
----
-### ⚙️ Teck Stack
-
-| **Tool**   | **Purpose ⭐**                                      |
-|------------|-----------------------------------------------|
-| **Excel**  → | ETL, Power Query, Initial Data Cleaning, Transformation |
-| **SQL**    → | Data Verification, segmentation logic, and KPI calculations.  |
-| **Power BI**  →| Interactive visualization/ Charts, Slicers,Data modeling (Star Schema)        |
+| **Sales**  | Gross Sales, Net Revenue, Orders, AOV | Business health performance |
+| **Customer**  | Revenue by Gender & Age | Target audience identification |
+| **Product** | Category Contribution | Revenue concentration |
+| **Logistics/ Operations**  | Delivery %, Cancellation Rate, Return Rate | Efficiency and cost control |
 
 
 ---
 
-### 3️⃣ Customer Segmentation & Behavioral Analysis (SQL)
 
-Developed a segmentation model to distinguish between One-time and Repeat purchasers to understand revenue concentration.
+### 🏗️ Data Preprocessing & Preparation
+
+1. Cleaned and processed **30,000+ transaction records** using Power Query ETL
+2. Important Columns : Channels, category , Quantity, Amount, Region, Date, Order_status, Age, Gender
+3. Handled **missing values** , removed **duplicates** in orders, and standardized date formats  
+4. Transformed raw Csv data into structured analytical format  
+
+---
+
+## 🗄️ SQL Deep Analysis & Business Queries  
+
+This section contains SQL queries used to validate KPIs, analyze trends, and uncover business inefficiencies.
+
+### 📊 1. Revenue Metrics  
+
+#### Total Revenue  
+```sql
+SELECT 
+    SUM(amount) AS total_revenue
+FROM ecommerce_data;
+
+```
+
+#### Net Revenue (Delivered Orders Only)
+
+```sql
+SELECT 
+    SUM(amount) AS net_revenue
+FROM ecommerce_data
+WHERE order_status = 'Delivered';
+
+```
+#### Total Orders
+
+```sql
+
+SELECT 
+    COUNT(DISTINCT order_id) AS total_orders
+FROM ecommerce_data;
+Average Order Value (AOV)
+SELECT 
+    SUM(amount) * 1.0 / COUNT(DISTINCT order_id) AS avg_order_value
+FROM ecommerce_data
+WHERE order_status = 'Delivered';
+
+```
+
+### 📈 2. Seasonality & Customer Insights
+
+#### Monthly Revenue Trend
+
+```sql
+
+SELECT 
+    order_month,
+    SUM(amount) AS revenue
+FROM ecommerce_data
+WHERE order_status = 'Delivered'
+GROUP BY order_month
+ORDER BY order_month;
+```
+
+#### Revenue by Age Group & Gender
+
+```sql
+
+SELECT 
+    age,
+    gender,
+    SUM(amount) AS revenue
+FROM ecommerce_data
+WHERE order_status = 'Delivered'
+GROUP BY age, gender
+ORDER BY age, revenue DESC;
+
+```
+
+### 🚚 3. Operations & Returns
+
+#### Cancellation Rate by Region
+```sql
+
+SELECT 
+    ship_state,
+    COUNT(CASE WHEN order_status = 'Cancelled' THEN 1 END) * 1.0 
+    / COUNT(*) AS cancellation_rate
+FROM ecommerce_data
+GROUP BY ship_state
+ORDER BY cancellation_rate DESC;
+
+```
+
+
+### 🔄 4. Returns Analysis
+
+#### Return Rate by Category
+
+```sql
+
+SELECT 
+    category,
+    COUNT(CASE WHEN order_status = 'Returned' THEN 1 END) * 1.0
+    / COUNT(CASE WHEN order_status = 'Delivered' THEN 1 END) AS return_rate
+FROM ecommerce_data
+GROUP BY category
+ORDER BY return_rate DESC;
+
+```
+
+
+#### Return Rate by State
 
 
 ```sql
--- Identifying Customer Loyalty Segments
-WITH CustomerStats AS (
-    SELECT 
-        Customer_ID,
-        COUNT(Order_ID) AS Order_Count,
-        SUM(Sales_Amount) AS Lifetime_Value
-    FROM Transactions
-    GROUP BY Customer_ID
-)
+
 SELECT 
-    CASE WHEN Order_Count > 1 THEN 'Repeat' ELSE 'One-Time' END AS Customer_Segment,
-    COUNT(Customer_ID) AS Total_Customers,
-    SUM(Lifetime_Value) AS Total_Revenue
-FROM CustomerStats
-GROUP BY 1;
+    ship_state,
+    COUNT(CASE WHEN order_status = 'Returned' THEN 1 END) * 1.0
+    / COUNT(CASE WHEN order_status = 'Delivered' THEN 1 END) AS return_rate
+FROM ecommerce_data
+GROUP BY ship_state
+ORDER BY return_rate DESC;
+
+```
+### 🧠 5. Advanced Analysis
+
+#### Category Revenue Ranking
+
+```sql
+
+WITH category_revenue AS (
+    SELECT 
+        category,
+        SUM(amount) AS revenue
+    FROM ecommerce_data
+    WHERE order_status = 'Delivered'
+    GROUP BY category )
+
+SELECT 
+    category,
+    revenue,
+    RANK() OVER (ORDER BY revenue DESC) AS rank_
+FROM category_revenue;
+
 ```
 
-### Key Finding
+#### Revenue Share by Category
 
-~70% of total revenue is generated by Repeat Customers, highlighting a high dependency on loyalty-driven segments.
+```sql
+
+WITH category_revenue AS (
+    SELECT 
+        category,
+        SUM(amount) AS revenue
+    FROM ecommerce_data
+    WHERE order_status = 'Delivered'
+    GROUP BY category )
+
+SELECT 
+    category,
+    revenue,
+    revenue * 1.0 / SUM(revenue) OVER() AS revenue_pct
+FROM category_revenue
+ORDER BY revenue DESC;
+
+```
+
 
 ---
 
-### 4️⃣ Visualization 
+## 🔥 What I improved 
 
-## 📊 Dashboard Preview
-![dash](https://github.com/user-attachments/assets/53cd6b27-cc27-44bf-b63e-ea85226b9281)
+- Fixed **SQL formatting (indentation + readability)**
+- Standardized **case ('Delivered', 'Cancelled')**
+- Corrected **AOV precision issue**
+- Fixed **wrong ORDER BY (month vs revenue)**
+
+
+> “SQL was used to perform KPI validation, trend analysis, and uncover operational inefficiencies across regions and product categories.”
+
 
 ---
 
-**Optimization Steps**
-1. Removed unnecessary columns to reduce model size.
-2. Leveraged Star Schema to optimize DAX measures and aggregations.
+## 2️⃣ Power Bi Visualization
 
+#### 📊 Data Modeling 
+
+Implemented a Star Schema for performance optimization:
+
+Fact Table: Sales Transactions
+Dimension Tables: Customers, Products, Date, Region
+
+✅ Reduced redundancy
+✅ Improved DAX performance
+✅ Scalable design
+
+
+## Dax Measures Utilized
+
+
+#### AOV
+
+``` power bi
+
+AOV = 
+DIVIDE(
+    [Net Revenue],
+    [Delivered Orders] )
+
+```
+
+#### Cancellation rate
+
+```
+Cancellation Rate = 
+DIVIDE(
+    CALCULATE(
+        COUNTROWS(Ecommerce_data),
+        Ecommerce_data[order_status] = "cancelled"
+    ),
+    COUNTROWS(Ecommerce_data) )
+
+```
+
+#### Ranking by Category 
+
+```
+Category Rank = 
+RANKX(
+    ALL(ecommerce_data[category]),
+    [Category Revenue],
+    ,
+    DESC )
+
+```
+
+#### Revenue by Category 
+
+```
+Category Revenue = 
+CALCULATE(
+    SUM(ecommerce_data[amount]),
+    ecommerce_data[order_status] = "delivered" )
+
+```
+
+#### Orders Delivered
+
+```
+Delivered Orders = 
+CALCULATE(
+    DISTINCTCOUNT(Ecommerce_data[Order ID]),
+    ecommerce_data[order_status] = "delivered" )
+
+
+```
+
+#### Net Revenue
+
+```
+
+Net Revenue = 
+CALCULATE(
+    SUM(ecommerce_data[Amount]),
+    ecommerce_data[order_status] = "delivered" )
+
+
+```
+
+
+
+#### Products Returned
+
+```
+
+Return Rate = 
+DIVIDE(
+    CALCULATE(
+        DISTINCTCOUNT(Ecommerce_data[Order ID]),
+        ecommerce_data[order_status] = "returned"
+    ),
+    CALCULATE(
+        DISTINCTCOUNT(Ecommerce_data[Order ID]),
+        ecommerce_data[order_status] = "delivered" ) )
+
+
+```
+
+#### Return %
+
+``` 
+Return_Rate_value = 
+DIVIDE(
+    CALCULATE(
+        DISTINCTCOUNT(ecommerce_data[Order ID]),
+        Ecommerce_data[Order_Status] = "Returned"
+    ),
+    DISTINCTCOUNT(ecommerce_data[Order ID]) )
+
+
+```
+
+#### Revenue %
+
+```
+
+Revenue % = 
+DIVIDE(
+    [Category Revenue],
+    CALCULATE(
+        [Category Revenue],
+        ALL(ecommerce_data[category] ) ) )
+
+
+```
+#### No of Orders
+
+```
+
+Total Orders = 
+DISTINCTCOUNT('Ecommerce_data'[Order ID])
+
+
+```
+
+#### Total Revenue
+
+```
+Total Revenue = SUM(ecommerce_data[Amount])
+
+
+```
+
+
+---
+
+
+## 📊 Business Health - Executive Summary (KPIs)  
+
+- **Gross Sales:** ₹21M  
+- **Net Revenue:** ₹20M  
+- **Total Orders:** 28K  
+- **Average Order Value (AOV):** ₹747  
+- **Return Rate:** 3.56%  
+
+
+
+---
+
+
+## 📊 Dashboard Preview  
+
+![Dashboard](<img width="990" height="573" alt="dash" src="https://github.com/user-attachments/assets/ae55a976-2a5a-481a-b6cb-ff88cac47f9f" />)
+
+
+---
 
 # 📊 Key Insights  
 
-1. **Loyalty:** Repeat customers drive **~70% of total revenue**.
-2. **Demographics:** Women aged **30–50 contribute ~60% of revenue**, forming the core customer base.
-3. **Geography**: **TOP 3** Maharashtra, Karnataka, and Uttar Pradesh are the top-performing states.
-4. **Channels:** High dependency on marketplaces **(Amazon, Flipkart, Myntra)** for order volume.
+### 👥 Customer Behavior  
+- Women contribute **64% of total revenue**  
+- Highest revenue from **age groups 36–50 and 18–25**  
+
+---
+
+### 🛍️ Product Performance  
+- **Top Categories:**  
+  - Set → ₹10.5M  
+  - Kurta → ₹5.0M  
+  - Western Dress → ₹3.1M  
+
+- **Low Contribution:**  
+  - Blouse, Bottom  
+
+---
+
+### ⚙️ Operational Efficiency  
+- **92.25% orders successfully delivered**  
+- **low return rate (3.56%)**  
+
+⚠️ **High Cancellation Regions:**  
+- Puducherry → 7.69%  
+- Andaman & Nicobar → 6.94%  
+
+---
+
+### 📉 Seasonal Trends  
+- Revenue declines after **Month 8 (August)**  
+- Indicates missed **festive season opportunity**
+
 ---
 
 # 💡 Business Recommendations  
 
-1. **Retention:** Launch targeted loyalty programs for high-value repeat buyers.
-2. **Marketing:** Focus ad spend on the Women 30–50 demographic in top-performing states.
-3. **Churn Prevention:** Implement RFM (Recency, Frequency, Monetary) tracking to identify at-risk customers.
+1. **Regional Optimization**  
+   - Improve delivery timelines in high-cancellation regions  
+   - Introduce better fulfillment options (e.g., faster shipping / COD)
+
+2. **Product Strategy**  
+   - Focus inventory on **Sets & Kurtas (high revenue drivers)**  
+   - Bundle low-performing items via cross-selling  
+
+3. **Targeted Marketing**  
+   - Focus on **women (36–50)** segment  
+   - Launch campaigns during **festive months (Sep–Dec)**  
+
+4. **Revenue Expansion**  
+   - Use top categories to drive **cross-sell opportunities**  
+   - Increase average order value through bundling  
 
 ---
-# 📂 Updated Repository Structure  
 
-```
-vrinda-retail-store-sales-analytics/
+# 📂 Updated Repository Structure  
+vrinda-Online-store-sales-analytics/
 │
-├── 📁 data/
-│   └── retail_data.xlsx
-│
-├── 📁 sql/
-│   ├── 01_data_cleaning.sql
-│   ├── 02_data_modeling.sql
-│   ├── 03_kpi_calculations.sql
-│   └── 04_customer_segmentation.sql
-│
-├── 📁 powerbi/
-│   └── retail_store_dashboard.pbix
-│
-├── 📁 dashboard/
-│   ├── overview.png
-│   ├── sales_analysis.png
-│   ├── customer_analysis.png
-│   └── product_insights.png
-│
-├── 📁 docs/
-│   └── data_dictionary.md
-│
+├── data/
+├── sql/
+├── powerbi/
+├── dashboard/
+├── docs/
 ├── README.md
 └── .gitignore
-```  
+
+---
+
+
+### ⚙️ Tech Stack  
+
+| Tool | Purpose ⭐ |
+|------|-----------|
+| **Excel** → | ETL, Power Query, Data Cleaning, Transformation |
+| **SQL** → | Deep analysis, Aggregations, calculations & segmentation |
+| **Power BI** → | Data modeling, Dax measures, Dashboards, Charts & visualization |
+
 ---
 
 # 👨‍💻 About Me  
 
-Hi, I’m **A. Sai Arvind**, a Data Analyst focused on building scalable, performance-optimized analytical solutions. 
+Hi, I’m **A. Sai Arvind**, a Data Analyst focused on building scalable, performance-driven analytical solutions.  
 
-📧 **Email:** saiarvind5081@gmail.com  
-🔗 **LinkedIn:** https://www.linkedin.com/in/saiarvindofficial/  
-🔗 **GitHub:** https://github.com/Sai-Arvind  
+📧 saiarvind5081@gmail.com  
+🔗 LinkedIn  
+🔗 GitHub  
 
 ---
 
