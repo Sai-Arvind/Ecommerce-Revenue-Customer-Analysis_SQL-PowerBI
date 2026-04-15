@@ -465,7 +465,11 @@ DIVIDE(
 - Improved AOV via bundling strategy
 
 ---
+
 # 📂 Repository Structure
+
+```
+
 vrinda-ecommerce-analytics/
 │
 ├── 📁 data/
@@ -500,6 +504,8 @@ vrinda-ecommerce-analytics/
 ├── README.md
 └── requirements.txt (optional)
 
+
+```
 ---
 
 
